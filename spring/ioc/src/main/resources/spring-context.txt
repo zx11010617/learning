@@ -1,0 +1,51 @@
+ConstructorArgumentValues
+    indexedArgumentValues   merge的时候是新的 -》 mergeable.merge(旧的)
+    genericArgumentValues   同上，不过因为没有index，要遍历所有的genericArgumentvalue找出相同名字的，进行merge
+
+
+BeanMetadataAttributeAccessor extends AttributeAccessorSupport
+    attribute的操作依赖于
+	/** Map with String keys and Object values */
+	private final Map<String, Object> attributes = new LinkedHashMap<>();
+
+abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccessor
+		implements BeanDefinition, Cloneable；
+
+
+public class PropertyValue extends BeanMetadataAttributeAccessor implements Serializable
+
+public class MutablePropertyValues implements PropertyValues, Serializable
+
+
+BeanFactory中有如下建议
+ * <p>Note that it is generally better to rely on Dependency Injection
+ * ("push" configuration) to configure application objects through setters
+ * or constructors, rather than use any form of "pull" configuration like a
+ * BeanFactory lookup. Spring's Dependency Injection functionality is
+ * implemented using this BeanFactory interface and its subinterfaces.
+
+
+
+
+
+ // 这个是注解配置bean的核心接口，最核心的部分是增加了这两个方法，可以获取Metadata。
+ AnnotatedBeanDefinition extends  BeanDefinition {
+     /**
+     * Obtain the annotation metadata (as well as basic class metadata)
+     * for this bean definition's bean class.
+     * @return the annotation metadata object (never {@code null})
+     */
+    AnnotationMetadata getMetadata();
+
+    /**
+     * Obtain metadata for this bean definition's factory method, if any.
+     * @return the factory method metadata, or {@code null} if none
+     * @since 4.1.1
+     */
+    @Nullable
+    MethodMetadata getFactoryMethodMetadata();
+}
+
+
+
+BeanFactoryPostProcessor的触发时机: 配置解析、BeanDefinition加载之后，Singleton初始化之前

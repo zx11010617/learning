@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                     http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+                     http://www.springframework.org/schema/context
+                     http://www.springframework.org/schema/context/spring-context-4.0.xsd"
+       default-autowire="byName">
+
+    <!--仅加载annotation-config是不够的，它只会用于加载beanpostprocessor，加载出有注解的类，要用到component-scan-->
+    <context:annotation-config></context:annotation-config>
+    <context:property-placeholder location="classpath:anno/over.properties"/>
+    <context:component-scan base-package="com.fs.ioc.anno3"/>
+</beans>

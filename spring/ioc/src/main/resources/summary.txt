@@ -1,0 +1,75 @@
+
+1.@Value解析
+  @Autowaire解析（按类型，为什么说是按类型）
+  @Resource解析
+
+  构造器选择顺序
+	1.注入时选择哪一个，如果有多个，报错，
+
+
+
+
+  循环依赖问题怎么解决的?在哪个阶段解决的。
+
+
+
+  @Autowaire非托管bean会如何
+
+
+
+  1.属性没有 setter方法会报错   AbstractNestablePropertyAccessor.processLocalProperty()。但是autowaire也没有set方法，不会报错。一个是调用Field的，一个是调用PropertyDiscriptor里面找write方法。
+		autowaire，放入metadata里面，从里面解析的时候，
+		property是放入BeanDefination里面，
+
+  2.interface如何注入实现，如果有多个实现，选哪一个@Qulifier   QualifierAnnotationAutowireCandidateResolver.checkQualifiers()
+  3.接口bean默认是类名小写，ComponentBean默认是全包名
+	XML出来的默认是包全名+#0
+
+
+
+  打日志，看出先构造函数，再属性
+
+
+
+  BeanDefinitionParserDelegate.heckNameUniqueness()确认不重复
+	1。id和name都可以，对bean而言，就是  name -> alias的区别
+
+
+  xml
+  ComponentScan
+  Component
+  Bean
+  Autowaire
+  Resource
+  ManagedBean
+
+
+
+
+  xml	-> reader
+  		-> documnet
+
+  	-> beandefination
+  		-> propertyvalue 1. k v
+  						 2. k RuntimeReference
+
+
+  	-> component-scan -> classes,加载成
+  		-> metadata
+  			-> 加载managedBean和Component注解的beans
+
+  	postProcess()
+  		-> 加载 @Import,@Componet-scan ,@Bean等注解
+  		-> 加载Bean中的@Autowaire,@Value等自动注入的属性，形成AutowaireMetadata
+
+  	initializeBean()
+  		-> 加载构造器
+  			-> 通过参数找candidate属性
+  		-> popuateBean()注入属性
+  			-> 对里面加载autowire的metadata，加载其值，通过Class去找candidateBean。
+  				最后，对Autowaire的属性通过调用（入口方法是InstantiationAwareBeanPostProcessor.postProcessPropertyValues()）
+  				ReflectionUtils.makeAccessible(field);
+                  field.set(bean, value);
+  				实现注入。也就是说，普通属性会进入 propertyvalue里面，autowaired不会，直接通过Field反射注入
+  				xml配置的ref会进入propertyvalue中通过RuntimeReference在后面实例化时，通过beanName去找实例
+

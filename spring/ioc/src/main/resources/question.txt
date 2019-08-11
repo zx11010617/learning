@@ -1,0 +1,5 @@
+1.获取ApplicationContext的方式
+       a) new XmlApplicationContext
+       b)实现一个ApplicationContextAware的Bean，在里面获取
+       c) @Autowaire
+       d) Web环境下，可以用Spring的工具类WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext), servletContext = request.getServletContext()
